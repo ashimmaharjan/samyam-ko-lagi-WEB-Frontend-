@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>User Dashboard</title>
+    <link href="style/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="style/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="style/style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+        integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+
+
+    <script src="jquery/jquery-3.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <style>
+        /* Make the image fully responsive */
+        .carousel-inner img {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            $.getJSON('http://localhost:1212/getCars', function (res) {
+                $.each(res, function (index) {
+                    $('#showCarDetails').append(
+                        '<div class="col-md-3 float-md-left">' +
+                        '<img class="img-fluid" src = "http://localhost:1212/' + res[index].carImageName + '" style = "height:300px; width:300px;"></div>' +
+                        '<div class="col-md-3 bg-light float-md-left">' +
+                        '<p class="lead"> Car:' + res[index].carName + '</p>' +
+                        '<p class="lead">Manufacturer:' + res[index].carMan + '</p>' +
+                        '<p class="lead">Air Conditioner:' + res[index].carAC_Status + '</p>' +
+                        '<p class="lead">Seats:' + res[index].carSeats + '</p>' +
+                        '<p class="lead">Mileage:' + res[index].carMileage + '</p>' +
+                        '<p class="lead">Registration Number:' + res[index].carRegistrationNo + '</p>' +
+                        '<p class="lead">Rental price per hour (NRs.):' + res[index].carRentalPrice + '</p>' +
+                        '<p><a href="book.html?id=' + res[index]._id + '"><button type"button" class="btn btn-outline-success">Book Now!<i class="fas fa-book"></i></button></a></p>' +
+                        '<p><a href="comment.html?id=' + res[index]._id + '""><button type"button" class="btn btn-secondary">Comment<i class="far fa-comments"></i></button></a></p></div>'
+                    );
+                })
+            })
+
+            var tok = localStorage.getItem('token');
+
+            $('#logout').click(function () {
+
+
+                console.log(tok);
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:1212/logout',
+
+                    beforeSend: function (xhr) {
+                        if (tok) {
+                            xhr.setRequestHeader('Authorization', 'Bearer' + tok);
+
+                        }
+                    },
+                    success: function (data) {
+
+                    },
+                    error: function (jqxhr, textStatus, errorThrown) {
+                        alert("Logged Out successfully.");
+                        location.href = "login.html";
+                    }
+                });
+
+            });
+        })
+
+    </script>
+</head>
+<header>
+
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-2 d-md-block d-none">
+                    <img class="img-fluid" src="images/cp_logo.jpg" alt="logo">
+                </div>
+                <div class="col-2 d-sm-block d-none d-md-none m-auto">
+                    <img src="images/cp_logo2.jpg" alt="">
+                </div>
+                <div class="col-md-8 welcome text-center mt-5">
+                    <h1> TRUEVALUE RENTAL</h1> <span> Start your travel planning now. </span>
+                </div>
+                <div class="col-md-2 d-xl-block d-none">
+                    <img class="img-fluid" src="images/cp_logo.jpg" alt="logo">
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-sm navbar-light bg-secondary mt-2">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-content"
+                aria-controls="nav-content" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="userdashboard.php">
+                <img src="images/small_logo.jpg" alt="logo" style="width:40px;">
+            </a>
+            <!-- Links -->
+            <div class="collapse navbar-collapse mx-auto" id="nav-content">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-warning" href="userDashboard.html">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-warning" href="openProfile.html">Profile</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-warning" href="displayMyBookings.html">My Bookings</a>
+                    </li>
+                </ul>
+                <form class="form-inline ml-auto">
+                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#myModal">Log Out
+                    </button>
+                </form>
+                <!-- The Modal -->
+                <div class="modal fade" id="myModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title">LOG OUT!!</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                Are you sure you want to log out?
+                            </div>
+
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+
+                                <button type="submit" id="logout" class="btn btn-danger">Yes</button>
+
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <form class="form-inline ml-auto" action="search.php" method="get">
+                    <input class="form-control mr-sm-2" type="text" name="search" placeholder="Vehicle name or type"
+                        required>
+                    <button class="btn btn-success" name="searchbtn" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+        <div class="container-fluid slider mt-2">
+            <div class="row">
+                <div class="col-md-7 bg-dark fluid">
+                    <div id="demo" class="carousel slide" data-ride="carousel">
+                        <ul class="carousel-indicators">
+                            <li data-target="#demo" data-slide-to="0" class="active"></li>
+                            <li data-target="#demo" data-slide-to="1"></li>
+                            <li data-target="#demo" data-slide-to="2"></li>
+                            <li data-target="#demo" data-slide-to="3"></li>
+                            <li data-target="#demo" data-slide-to="4"></li>
+                            <li data-target="#demo" data-slide-to="5"></li>
+                        </ul>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="images/sedan2.jpg" alt="vehicleall" width="1000" height="500">
+
+                            </div>
+                            <div class="carousel-item">
+                                <img src="images/hatchback.jpg" alt="vehicle1" width="1000" height="500">
+
+                            </div>
+
+                            <div class="carousel-item">
+                                <img src="images/sedan.jpg" alt="vehicle2" width="1000" height="500">
+
+                            </div>
+
+                            <div class="carousel-item">
+                                <img src="images/hyundai.jpg" alt="vehicle3" width="1000%" height="500%">
+
+                            </div>
+                            <div class="carousel-item">
+                                <img src="images/jeep.jpg" alt="vehicle4" width="1000" height="500">
+
+                            </div>
+                            <div class="carousel-item">
+                                <img src="images/crossover.jpg" alt="vehicle5" width="1000" height="500">
+
+                            </div>
+                        </div>
+                        <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </a>
+                        <a class="carousel-control-next" href="#demo" data-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-5 bg-light">
+                    <h1 class="display-4">Welcome</h1>
+                    <p class="lead">Hiring car and bus just got easier with the reliable service of Vehicle Rental
+                        Service! Having covered many cities in the country, we offer the finest choice of vehicles
+                        ranging from economy to luxury.</p>
+                    <p class="lead">We have tied up with renowned vehicle rental brands so that we can provide our
+                        customers with the most economic vehicle rental deals along with world class customer service.
+                    </p>
+                    <ul class="list__marker lead">
+                        <li>Best price guarantee</li>
+                        <li>No cancellation or amendment fees</li>
+                        <li>No hidden extras to pay - theft and damage cover included</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="showCarDetails" class="container-fluid col-l-12 bg-dark mt-3">
+        </div>
+    </body>
+    <footer>
+        <div class="container-fluid footer bg-info mt-3">
+            <div class="row">
+                <div class="col-md-4 mt-4">
+                    <p><span class="lead display-5"><i class="fas fa-map-marker-alt"></i> <b>Naxal road,
+                                Kathmandu</b></span></p>
+                    <p>
+                        &copy; Truevalue Rentals. All rights reserved.
+                    </p>
+                </div>
+                <div class="col-md-4 mt-4">
+                    <p class="lead display-5"><span><b> CONTACT US : </b></span></p>
+                    <p> EMAIL: <i class="fas fa-envelope"></i> <a class="text-light"
+                            href="mailto:truevaluerentals977@gmail.com">truevaluerentals977@gmail.com</a> </p>
+                    <p> PHONE NO : <i class="fas fa-phone"></i> <a class="text-light"
+                            href="tel: 0143354328">01-43354328</a>
+                        <p>
+                </div>
+                <div class="col-md-4 mt-4">
+                    <p class="lead display-5"><b> VISIT US : </b></p>
+                    <p><a href="https://www.facebook.com/"><img src="images/icon-facebook.png" alt="fb" class="fb"></a>
+                        <span><a href="https://www.twitter.com/"><img src="images/icon-twitter.png" alt="twitter"
+                                    class="twitter ml-3"></a></span>
+                        <span><a href="https://plus.google.com/"><img src="images/icon-googleplus.png" alt="googleplus"
+                                    class="googleplus ml-3"></a></span>
+                        <span><a href="https://www.pinterest.com/"><img src="images/icon-pinterest.png"
+                                    alt="pininterest" class="pininterest ml-3"></a></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>

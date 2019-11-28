@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Rents</title>
+    <link href="style/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="style/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="style/style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+        integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $.getJSON('http://localhost:1212/getBookings', function (res) {
+                var i = 0;
+                $.each(res, function (index) {
+                    $('#showBookings').append(
+                        '<tr>' +
+                        '<td>' + (++i) + '</td>' +
+                        '<td>' + res[index].userId + '</td>' +
+                        '<td>' + res[index].first_name + '</td>' +
+                        '<td>' + res[index].phone_number + '</td>' +
+                        '<td>' + res[index].carName + '</td>' +
+                        '<td>' + res[index].carRentalPrice + '</td>' +
+                        '<td>' + res[index].pickUpLocation + '</td>' +
+                        '<td>' + new Date(res[index].pickUpDate).toISOString().split('T')[0] + '</td>' +
+                        '<td>' + res[index].dropOffLocation + '</td>' +
+                        '<td>' + new Date(res[index].dropOffDate).toISOString().split('T')[0] + '</td>' +
+                        '<td>' +
+                        '<button id="deleteBooking" value="' + res[index]._id + '" class="btn btn-danger">Delete <i class="fa fa-trash" aria-hidden="true"></i></button>');
+                });
+            });
+
+            $('#showBookings').on('click', '#deleteBooking', function () {
+
+                id = $(this).val();
+                $.ajax({
+                    url: 'http://localhost:1212/deleteBookings/' + id,
+                    type: 'DELETE',
+                    dataType: 'json',
+                    data: id,
+                    success: function (data, textStatus, xhr) {
+                        console.log(data);
+                        alert("Booking data deleted successfully");
+                        window.location.reload();
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.log('Error in Operation');
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 d-md-block d-none">
+                <img src="images/cp_logo.jpg" alt="logo">
+            </div>
+            <div class="col-2 d-sm-block d-none d-md-none m-auto">
+                <img src="images/cp_logo2.jpg" alt="">
+            </div>
+            <div class="col-md-8 welcome text-center mt-5">
+                <h1> TRUEVALUE RENTAL</h1> <span> Start your travel planning now. </span>
+            </div>
+            <div class="col-md-2 d-xl-block d-none">
+                <img src="images/cp_logo.jpg" alt="logo">
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-sm navbar-light bg-secondary mt-2">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-content"
+            aria-controls="nav-content" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="admindash.php">
+            <img src="images/small_logo.jpg" alt="logo" style="width:40px;">
+        </a>
+        <!-- Links -->
+        <div class="collapse navbar-collapse" id="nav-content">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-warning" href="admin_dashboard.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-warning" href="usersData.html">Manage users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-warning" href="managevehicles.html">Manage vehicles</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-warning" href="rcm.html">Manage Rents/Comments</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="display-3 text-center">Displaying all Bookings</h1>
+                <div class="table-responsive">
+                    <table id="showBookings" class="table table-striped">
+                        <thead class="thead-dark">
+                            <tr class="table-dark text-dark">
+                                <th>S.N.</th>
+                                <th>Customer Id</th>
+                                <th>Customer Name</th>
+                                <th>Contact Number</th>
+                                <th>Car Name</th>
+                                <th>Rental Price/hr</th>
+                                <th>Pick-up Location</th>
+                                <th>Pick-up Date</th>
+                                <th>Drop-off Location</th>
+                                <th>Drop-off Date</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<footer>
+    <div class="container-fluid footer bg-info mt-3">
+        <div class="row">
+            <div class="col-md-4 mt-4">
+                <p><span class="lead display-5"><i class="fas fa-map-marker-alt"></i> <b>Naxal road,
+                            Kathmandu</b></span></p>
+                <p>
+                    &copy; Truevalue Rentals. All rights reserved.
+                </p>
+            </div>
+            <div class="col-md-4 mt-4">
+                <p class="lead display-5"><span><b> CONTACT US : </b></span></p>
+                <p> EMAIL: <i class="fas fa-envelope"></i> <a class="text-light"
+                        href="mailto:truevaluerentals977@gmail.com">truevaluerentals977@gmail.com</a> </p>
+                <p> PHONE NO : <i class="fas fa-phone"></i> <a class="text-light" href="tel: 0143354328">01-43354328</a>
+                    <p>
+            </div>
+            <div class="col-md-4 mt-4">
+                <p class="lead display-5"><b> VISIT US : </b></p>
+                <p><a href="https://www.facebook.com/"><img src="images/icon-facebook.png" alt="fb" class="fb"></a>
+                    <span><a href="https://www.twitter.com/"><img src="images/icon-twitter.png" alt="twitter"
+                                class="twitter ml-3"></a></span>
+                    <span><a href="https://plus.google.com/"><img src="images/icon-googleplus.png" alt="googleplus"
+                                class="googleplus ml-3"></a></span>
+                    <span><a href="https://www.pinterest.com/"><img src="images/icon-pinterest.png" alt="pininterest"
+                                class="pininterest ml-3"></a></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>

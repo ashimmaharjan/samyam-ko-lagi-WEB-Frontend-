@@ -1,0 +1,46 @@
+.welcome h1{
+	font-weight: bold;
+	line-height: 50px;
+	text-decoration: none;
+	color: black;
+	font-family: "Remachine Script Personal Use";
+}
+.welcome span {
+	color: #14b04b;
+	display: block;
+	font-family: "sketch";
+	margin:0;
+}
+.navigation ul li a
+{
+    color: azure;
+}
+.upic
+{
+    border-radius: 5px;
+}
+.registercon
+{
+    border-radius: 10px;
+}
+.manage
+{
+    width: 300px;
+    height: 250px;
+}
+.manage p 
+{
+    text-align: center;
+}
+.adminwelcome
+{
+    text-align: center;
+    font-size: 30px;
+    font-family:forte;
+}
+.footer
+{
+    clear: both;
+}
+
+
